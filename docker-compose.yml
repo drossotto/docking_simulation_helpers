@@ -1,0 +1,20 @@
+services:
+  deepglycansite:
+    build:
+      context: DeepGlycanSite
+      dockerfile: Dockerfile
+    volumes:
+      - ./DeepGlycanSite:/app
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+    networks: 
+      - mol_dock_network
+
+        
+
+networks:
+  mol_dock_network:
+    driver: bridge
