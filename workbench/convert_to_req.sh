@@ -28,3 +28,4 @@ sed -i '/^$/d' "$REQUIREMENTS_TXT"
 
 echo "requirements.txt created at $REQUIREMENTS_TXT"
 exit 0
+
