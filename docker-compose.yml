@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./DeepGlycanSite:/app
+      - workflow_data:/app/DeepGlycanSite/workflow_data
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
@@ -13,8 +14,38 @@ services:
     networks: 
       - mol_dock_network
 
+  test_bench:
+    build:
+      context: test_bench
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    ports:
+      - 8000:8000
+    volumes:
+      - workflow_data:/workflow_data
+    networks:
+      - mol_dock_network
+
+  build_gui:
+    build:
+      context: docking_simulations_gui
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    stdin_open: true
+    tty: true
+    networks:
+      - mol_dock_network
+
         
+volumes:
+  workflow_data:
+    driver: local
+
 
 networks:
   mol_dock_network:
+    name: mol_dock_network
     driver: bridge
+

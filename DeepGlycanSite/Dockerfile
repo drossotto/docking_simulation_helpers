@@ -32,4 +32,6 @@ WORKDIR /app
 
 COPY . .
 
+WORKDIR /app/DeepGlycanSite
+
 CMD ["bash"]
