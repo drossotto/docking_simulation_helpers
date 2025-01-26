@@ -12,14 +12,6 @@ from app.modules.files.upload_files import router as upload_file_router
 
 app = FastAPI()
 
-app.mount(
-    "/static", 
-    StaticFiles(directory="../frontend/dist", html=True), 
-    name = "frontend"
-)
-
-#Move access to
-
 app.add_middleware(
     CORSMiddleware, 
     allow_origins=["*"],
