@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import FileDisplay from './components/File_tree';
+
 const App: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<string | null>(null);
@@ -21,7 +23,7 @@ const App: React.FC = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('/api/upload', formData, {
+      const response = await axios.post('api/files/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -47,6 +49,7 @@ const App: React.FC = () => {
         </div>
       )}
     </div>
+    
   );
 };
 

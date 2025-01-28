@@ -24,10 +24,10 @@ os.makedirs("uploaded_files", exist_ok=True)
     
 app.include_router(
     current_file_router, 
-    prefix="/files"
+    prefix="/api/files"
 )
 
 app.include_router(
     upload_file_router,
-    prefix="/files"
+    prefix="/api/files"
 )
