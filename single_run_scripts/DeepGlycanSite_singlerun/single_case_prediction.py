@@ -10,11 +10,11 @@ from Bio import PDB
 import logging
 
 
-
-logger = logging.basicConfig(
+logging.basicConfig(
     level=logging.INFO,
     stream=sys.stdout
 )
+logger = logging.getLogger(__name__)
 
 
 class InputValidator(BaseModel):
@@ -22,19 +22,21 @@ class InputValidator(BaseModel):
     sdf_file: Path
 
     @model_validator(mode='before')
-    def convert_to_path(cls, value):
-        if isinstance(value, str):
-            return Path(value).resolve()
+    def convert_to_path(cls, values):
+        if isinstance(values, dict):
+            for key, value in values.items():
+                if isinstance(value, str):
+                    values[key] = Path(value).resolve()
+        return values
 
-        return value
-
-    @model_validator()
-    def check_if_path_is_legit(cls, file_path: Path) -> Path:
-        if not file_path.is_file():
-            raise ValueError(
-                f"File does not exist or is not a valid path: {file_path}"
-            )
-        return file_path
+    @model_validator(mode="after")
+    def check_if_path_is_legit(cls, values):
+        for key, value in values.items():
+            if not value.is_file():
+                raise ValueError(
+                    f"File does not exist or is not a valid path: {value}"
+                )
+        return values
 
 def argument_parser():
     parser = argparse.ArgumentParser(
@@ -133,6 +135,11 @@ class PDBHandler:
 
 def main():
     args = argument_parser()
+    input_validator = InputValidator(
+        pdb_file=args.pdb_file,
+        sdf_file=args.sdf_file
+    )
 
 if __name__ == "__main__":
+    logger.info("Starting DeepGlycanSite single case prediction")
     main()
