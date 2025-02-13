@@ -3,3 +3,7 @@ projects/
 DeepGlycanSite/DeepGlycanSite/ckpts/rec_only.ckpt
 
 Input/
+
+dist/
+
+testbench/

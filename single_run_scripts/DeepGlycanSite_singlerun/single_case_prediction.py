@@ -2,7 +2,7 @@ from pathlib import Path
 import argparse
 import sys
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, FilePath
 import docker
 import docker.errors
 from docker.models.containers import Container
@@ -18,27 +18,11 @@ logger = logging.getLogger(__name__)
 
 
 class InputValidator(BaseModel):
-    pdb_file: Path
-    sdf_file: Path
+    pdb_file: FilePath
+    sdf_file: FilePath
 
-    @model_validator(mode='before')
-    def convert_to_path(cls, values):
-        if isinstance(values, dict):
-            for key, value in values.items():
-                if isinstance(value, str):
-                    values[key] = Path(value).resolve()
-        return values
 
-    @model_validator(mode="after")
-    def check_if_path_is_legit(cls, values):
-        for key, value in values.items():
-            if not value.is_file():
-                raise ValueError(
-                    f"File does not exist or is not a valid path: {value}"
-                )
-        return values
-
-def argument_parser():
+def argument_parser(): 
     parser = argparse.ArgumentParser(
         description="Run the DeepGlycanSite single_case_prediction method with a \n protein and a ligand"
     )
@@ -101,8 +85,6 @@ class DockerHandler:
                 logger.info(f"Container: {container.name} started")
 
         
-
-
 class PDBHandler:
     """
     Class to handle manipulations and storage of the PROTEIN structure
@@ -134,11 +116,21 @@ class PDBHandler:
         return (residues, len(residues))
 
 def main():
+    docker_handler = DockerHandler()
+    if docker_handler.client:
+        logger.info(f"Connected to Docker engine: {docker_handler.client}")
+    
     args = argument_parser()
     input_validator = InputValidator(
         pdb_file=args.pdb_file,
         sdf_file=args.sdf_file
     )
+
+    for container in docker_handler.client.containers.list(all=True):
+        if f"{docker_handler.project_name}-{docker_handler.service_name}-1" in container.name:
+            print(f"Container: {container.name} found")
+
+     
 
 if __name__ == "__main__":
     logger.info("Starting DeepGlycanSite single case prediction")

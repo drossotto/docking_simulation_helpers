@@ -4,8 +4,9 @@ services:
       context: DeepGlycanSite
       dockerfile: Dockerfile
     volumes:
-      - ./DeepGlycanSite:/app
-      - workflow_data:/app/DeepGlycanSite/workflow_data
+      - type: bind
+        source: ./shared_data
+        target: /app/DeepGlycanSite/workflow_data
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
@@ -14,54 +15,6 @@ services:
     networks: 
       - mol_dock_network
 
-  test_bench_and_admin:
-    build:
-      context: test_bench
-      dockerfile: Dockerfile
-    stdin_open: true
-    tty: true
-    ports:
-      - 8000:8000
-    volumes:
-      - workflow_data:/workflow_data
-    networks:
-      - mol_dock_network
-
-  frontend_gui:
-    build:
-      context: docking_sim_gui/frontend
-      dockerfile: Dockerfile
-    ports:
-      - "8001:80"
-    networks:
-      - mol_dock_network
-
-  backend_middleware:
-    build:
-      context: docking_sim_gui/backend
-      dockerfile: Dockerfile
-    ports:
-      - "8002:8002"
-    networks:
-      - mol_dock_network
-
-  nginx_router:
-    image: nginx:alpine
-    ports:
-      - "8080:80"
-    volumes: 
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    networks:
-      - mol_dock_network
-
-        
-volumes:
-  workflow_data:
-    driver: local
-
-
 networks:
   mol_dock_network:
-    name: mol_dock_network
     driver: bridge
-
