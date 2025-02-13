@@ -45,7 +45,14 @@ def set_shared_volume_path(
 ):
     """
     Declare the folder which shares files between the host and the container. 
-    Place ligand and enzyme files here. 
     """
-    store_data("shared_volume_path", str(folder))
+    store_data("shared_volume_path", str(Path(folder).resolve()))
     logger.info(f"Shared volume path set to {folder}")
+
+
+@app.command()
+def return_shared_volume_path():
+    """
+    Provide the shared volume path.
+    """
+    logger.info(f"Shared volume path: {str(get_data('shared_volume_path'))}")

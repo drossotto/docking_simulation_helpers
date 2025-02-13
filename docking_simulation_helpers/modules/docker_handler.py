@@ -3,7 +3,6 @@ This module defines methods to interact with Docker containers.
 Should not directly define any commands in the cli. 
 """
 
-
 import docker
 import docker.errors
 import docker.models
@@ -23,21 +22,50 @@ class GeneralDockerMethods:
         
         except Exception as e:
             raise docker.errors.DockerException
+    
+    def execute_command_in_container(
+        self,
+        container_name: str,
+        command: str,
+        detach: bool = False,
+    ) -> tuple[int, str]:
+        """
+        Execute a command within a docker container.
+        """
+
+        container: docker.models.containers.Container = self.client.containers.get(
+            container_name
+        )
         
-    @staticmethod
-    def place_file_in_container(
-        container: docker.models.containers.Container,
-        file_path: str,
-        destination_path: str,
-    ):
-        """
-        Place a file in a container.
-        """
-
         try:
-            with open(file_path, "rb") as file:
-                container.put_archive(destination_path, file)
-
+            exit_code, result = container.exec_run(
+                command,
+                detach=detach,
+            )
+        except docker.api.client.APIError as e:
+            raise docker.errors.APIError
         except Exception as e:
-            logger.error(f"Error placing file in container: {e}")
-
+            raise docker.errors.DockerException
+        
+        if detach:
+            return exit_code, "Command executed in detached mode"
+        else:  
+            return exit_code, result.decode("utf-8")
+        
+    def check_if_container_is_running(
+        self,
+        container_name: str,
+    ) -> bool:
+        """
+        Check if a docker container is running.
+        """
+        try:
+            container: docker.models.containers.Container = self.client.containers.get(
+                container_name
+            )
+            return container.status == "running"
+        
+        except docker.errors.NotFound:
+            return False
+        except Exception as e:
+            raise docker.errors.DockerException
