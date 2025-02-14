@@ -2,7 +2,7 @@ import typer
 from pathlib import Path
 
 from . import logger
-from .commands import setup_commands, docker_manipulations, add_files, deepglycansite
+from .commands import file_operations, setup_commands, docker_manipulations, deepglycansite
 from .modules.docker_handler import GeneralDockerMethods
 
 
@@ -25,7 +25,7 @@ app.add_typer(
 
 ### Add Files Commands ###
 app.add_typer(
-    add_files.app,
+    file_operations.app,
     name="files",
     help="Commands for adding files to the application."
 )
