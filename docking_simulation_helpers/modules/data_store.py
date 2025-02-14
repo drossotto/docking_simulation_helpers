@@ -17,7 +17,30 @@ def get_data_directory():
         if data_dir.exists():
             return data_dir
     except Exception:
-        pass
+        logger.error("Data directory does not exist and cannot be accessed.")
+        return Path(os.path.expanduser('~')) / '.docking_simulation_helpers' / 'data'
+
+from typing import Union
+
+def get_docker_compose_path() -> Union[Path, None]:
+    """Retrieve the path to the Docker Compose file."""
+    try:
+        prod_network_path = importlib.resources.files(__package__) / 'prod'
+        if prod_network_path.exists():
+            if (prod_network_path / 'docker-compose.yml').exists():
+                return prod_network_path / 'docker-compose.yml'
+            else:
+                logger.error("Production network path does not contain a Docker Compose file.")
+
+                return None
+        else:
+            logger.error("Production network path does not exist.")
+
+            return None
+    except Exception:
+        logger.error("Docker Compose file does not exist and cannot be accessed.")
+        return None
+
 
     # Fallback to a writable directory if the package data is not accessible
     return Path(os.path.expanduser('~')) / '.docking_simulation_helpers' / 'data'
@@ -50,3 +73,12 @@ def get_data(key: str) -> str:
     except dbm.error as e:
         logger.error(f"Error accessing the database: {e}")
         return None
+    
+def cat_docker_compose():
+    """Print the Docker Compose file."""
+    docker_compose_path = importlib.resources.files(__package__) / 'prod' / 'docker-compose.yml'
+    if docker_compose_path:
+        with open(docker_compose_path, 'r') as f:
+            print(f.read())
+    else:
+        logger.error("Docker Compose file not found. Have you set it up?")

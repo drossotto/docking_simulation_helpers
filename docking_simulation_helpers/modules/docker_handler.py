@@ -3,6 +3,7 @@ This module defines methods to interact with Docker containers.
 Should not directly define any commands in the cli. 
 """
 
+from python_on_whales import docker as py_docker
 import docker
 import docker.errors
 import docker.models
@@ -69,3 +70,4 @@ class GeneralDockerMethods:
             return False
         except Exception as e:
             raise docker.errors.DockerException
+        

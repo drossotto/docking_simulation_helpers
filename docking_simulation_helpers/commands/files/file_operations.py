@@ -3,8 +3,9 @@ from pathlib import Path
 from enum import Enum
 import shutil
 
-from .. import logger
-from ..modules.data_store import get_data
+from ... import logger
+from ...modules.data_store import get_data
+from ...modules.data_store import cat_docker_compose
 
 app = typer.Typer()
 
@@ -84,3 +85,9 @@ def list_files(
         else:
             logger.info(f"No .pdb files found in {destination_path}")
 
+@app.command()
+def return_docker_compose_file():
+    """
+    Print the Docker Compose file.
+    """
+    cat_docker_compose()

@@ -11,3 +11,6 @@ testbench/
 shared_data/pdb_structures/*
 
 shared_data/sdf_ligand_files/*
+
+../docker-compose.yml
+
