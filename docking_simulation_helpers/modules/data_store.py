@@ -7,18 +7,18 @@ import dbm
 from pathlib import Path
 import os
 
-from .. import logger
+from .. import logger, PackageDirectory
 
-def get_data_directory():
+def get_directory(directory_name: str) -> Path:
     """Retrieve the data directory path."""
     try:
         # Access the data directory within the package
-        data_dir = importlib.resources.files(__package__) / 'data'
+        data_dir = Path(PackageDirectory().package_root_directory / directory_name).resolve()
         if data_dir.exists():
             return data_dir
     except Exception:
-        logger.error("Data directory does not exist and cannot be accessed.")
-        return Path(os.path.expanduser('~')) / '.docking_simulation_helpers' / 'data'
+        logger.error(f"Directory {directory_name} does not exist and cannot be accessed.")
+        raise Path(PackageDirectory().package_root_directory)
 
 from typing import Union
 
@@ -47,7 +47,7 @@ def get_docker_compose_path() -> Union[Path, None]:
 
 def store_data(key: str, value: str):
     """Store a key-value pair in the database."""
-    data_dir = get_data_directory()
+    data_dir = get_directory("data")
     data_dir.mkdir(parents=True, exist_ok=True)
     db_path = data_dir / 'config.db'
 
@@ -59,7 +59,7 @@ def store_data(key: str, value: str):
 
 def get_data(key: str) -> str:
     """Retrieve a value by its key from the database."""
-    data_dir = get_data_directory()
+    data_dir = get_directory("data")
     db_path = data_dir / 'config.db'
 
     try:
@@ -73,12 +73,3 @@ def get_data(key: str) -> str:
     except dbm.error as e:
         logger.error(f"Error accessing the database: {e}")
         return None
-    
-def cat_docker_compose():
-    """Print the Docker Compose file."""
-    docker_compose_path = importlib.resources.files(__package__) / 'prod' / 'docker-compose.yml'
-    if docker_compose_path:
-        with open(docker_compose_path, 'r') as f:
-            print(f.read())
-    else:
-        logger.error("Docker Compose file not found. Have you set it up?")
