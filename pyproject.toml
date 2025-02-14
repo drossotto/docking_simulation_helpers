@@ -1,6 +1,6 @@
 [project]
 name = "docking-simulation-helpers"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Command-Line Interface for interacting with a series of programs for molecular docking and molecular dynamics simulations."
 authors = [
     {name = "Davide Rossotto",email = "drossotto@crimson.ua.edu"}
