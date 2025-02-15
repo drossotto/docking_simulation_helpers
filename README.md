@@ -16,4 +16,16 @@ Services:
 
 Notes: 
 
-- In the repository, there is a docker-compose.yml that ships with the python package that establishes the services to be included in the application. That is how we can ship a large amount of application in a one-step python package. 
+- In the repository, there is a docker-compose.yml that ships with the python package that establishes the services to be included in the application. That is how we can ship a large amount of application in a one-step python package.
+
+
+```mermaid
+flowchart TD
+    A[Docking Simulation Helpers] --> B[Installation]
+    B --> C[Prerequisites]
+    B --> D[Steps]
+    A --> E[Usage]
+    E --> F[Command 1]
+    F --> G[Subcommand A]
+    F --> H[Subcommand B]
+    E --> I[Command 2]
