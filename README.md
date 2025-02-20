@@ -1,6 +1,6 @@
 # Docking Simulation Helpers
 
-Local network application for molecular docking and molecular dynamics simulations built for the Research Lab. 
+Local network application for molecular docking and molecular dynamics simulations built for the Higgins Research Lab. 
 
 The goal is to keep it super simple and maximize abstraction for our wet-lab biologists. Anything requiring significant installation receives a docker container. This adds tons of overhead, as well as having redundant packages, but we do not care. 
 
