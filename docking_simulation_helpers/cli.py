@@ -1,11 +1,11 @@
 import typer
-from pathlib import Path
 
 from . import logger
-from .commands.deepglycansite import deepglycansite
 from .commands.docker import docker_manipulations
-from .commands.setup import setup_commands
 from .commands.files import file_operations
+from .commands.deepglycansite import deepglycansite
+from .commands.setup import setup_commands
+
 
 
 app = typer.Typer()

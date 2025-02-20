@@ -12,4 +12,9 @@ shared_data/pdb_structures/*
 
 shared_data/sdf_ligand_files/*
 
+<<<<<<< HEAD
 *-drossotto*
+=======
+../docker-compose.yml
+
+>>>>>>> e4784a9bd2d7d0f0032b8af4f613ef78760e7da7
