@@ -1,9 +1,9 @@
 import typer
 from pathlib import Path
 
-from .. import logger
-from ..modules.data_store import get_data
-from ..modules.docker_handler import GeneralDockerMethods
+from ... import logger
+from ...modules.data_store import get_data
+from ...modules.docker_handler import GeneralDockerMethods
 
 app = typer.Typer()
 
