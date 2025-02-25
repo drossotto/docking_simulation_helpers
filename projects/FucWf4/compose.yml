@@ -1,0 +1,21 @@
+services:
+  deepglycansite:
+    image: drossotto/deepglycansite
+    mem_limit: 12G
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - type: bind
+        source: ./fucoidan_disaccharide_structures
+        target: /app/DeepGlycanSite/workflow_data/ligands
+      - type: bind
+        source: ./FucWf4-pdbs
+        target: /app/DeepGlycanSite/workflow_data/enzymes
+      - type: bind
+        source: ./outputs
+        target: /app/DeepGlycanSite/workflow_data/outputs
+    tty: true
+    stdin_open: true
+    container_name: deepglycansite-fucwf4
+

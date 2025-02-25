@@ -18,3 +18,9 @@ Notes:
 
 - In the repository, there is a docker-compose.yml that ships with the python package that establishes the services to be included in the application. That is how we can ship a large amount of application in a one-step python package.
 
+
+Project Structure:
+
+```sh
+tree
+```

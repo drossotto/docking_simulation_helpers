@@ -2,7 +2,7 @@ import typer
 from pathlib import Path
 
 from ... import logger
-from ...modules.data_store import store_data, get_data_directory, get_data
+from ...modules.data_store import store_data, get_directory, get_data
 from ...modules.docker_handler import GeneralDockerMethods
 
 app = typer.Typer()
@@ -27,7 +27,7 @@ def return_network_name():
     """
     Provide the docker network name.
     """
-    data_dir = get_data_directory()
+    data_dir = get_directory("data")
 
     logger.info(f"Data directory: {data_dir}")
 
